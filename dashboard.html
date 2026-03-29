@@ -20,7 +20,7 @@
 <canvas id="chart"></canvas>
 
 <script>
-const socket = io('http://localhost:5000');
+const socket = io('https://load-balancer-simulator.onrender.com');
 let chart;
 
 socket.on('update', (servers)=>{
