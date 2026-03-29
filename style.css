@@ -1,0 +1,6 @@
+body{font-family:Arial;background:#0f172a;color:white;text-align:center}
+.navbar{padding:15px;background:#111}
+.hero{padding:50px}
+.card{background:#1e293b;padding:20px;border-radius:10px}
+.center{display:flex;justify-content:center;align-items:center;height:100vh}
+input,button{margin:10px;padding:10px}

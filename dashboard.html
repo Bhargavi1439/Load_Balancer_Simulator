@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Dashboard</h1>
+
+<select id="strategy">
+<option value="round">Round Robin</option>
+<option value="least">Least</option>
+</select>
+
+<button onclick="send()">Send</button>
+
+<div id="servers"></div>
+<canvas id="chart"></canvas>
+
+<script>
+const socket = io('http://localhost:5000');
+let chart;
+
+socket.on('update', (servers)=>{
+ render(servers);
+ updateChart(servers);
+});
+
+async function send(){
+ await fetch('http://localhost:5000/request',{
+  method:'POST',
+  headers:{'Content-Type':'application/json'},
+  body: JSON.stringify({strategy: strategy.value})
+ });
+}
+
+function render(servers){
+ document.getElementById('servers').innerHTML =
+ servers.map(s=>`<div>Server ${s.id}: ${s.load}</div>`).join('');
+}
+
+function updateChart(servers){
+ const data = servers.map(s=>s.load);
+ if(!chart){
+  chart = new Chart(document.getElementById('chart'),{
+   type:'bar',
+   data:{labels:['S1','S2','S3'],datasets:[{label:'Load',data}]}
+  });
+ } else {
+  chart.data.datasets[0].data = data;
+  chart.update();
+ }
+}
+</script>
+</body>
+</html>
